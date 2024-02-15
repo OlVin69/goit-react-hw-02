@@ -1,0 +1,23 @@
+.table {
+  width: 100%;
+  border: 1px solid #111;
+  border-spacing: 0;
+  font-size: 20px;
+}
+
+.thead {
+  background-color: #212121;
+  border-color: #111;
+}
+
+.headCell {
+  width: calc(100% / 3);
+  color: #fff;
+  border: 1px solid #111;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.tableRow:nth-child(even) {
+  background-color: #a5a5a5;
+}

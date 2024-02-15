@@ -1,0 +1,18 @@
+.data {
+  border: 1px solid #111;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: #111;
+}
+
+.data::first-letter {
+  text-transform: uppercase;
+}
+
+.data:first-child {
+  text-align: start;
+  padding-left: 45px;
+}
