@@ -1,25 +1,63 @@
 import './App.css';
-import userData from '../../userData.json';
-import Profile from '../Profile/Profile';
-import friends from '../../friends.json';
-import FriendList from '../FriendList/FriendList';
-import TransactionHistory from '../TransactionHistory/TransactionHistory';
-import transactions from '../../transactions.json';
+import Description from '../Description/Description';
+import Options from '../Options/Options';
+import Feedback from '../Feedback/Feedback';
+import Notification from '../Notification/Notification';
+import { useState, useEffect } from 'react';
 
-const App = () => {
+export default function App() {
+  const [values, setValues] = useState(() => {
+    const savedValues = localStorage.getItem('saved-values');
+    if (savedValues !== null) {
+      return JSON.parse(savedValues);
+    }
+    return { good: 0, neutral: 0, bad: 0 };
+  });
+
+  const updateFeedback = option => {
+    setValues({
+      ...values,
+      [option]: values[option] + 1,
+    });
+  };
+
+  const resetFeedback = () => {
+    setValues({
+      good: 0,
+      neutral: 0,
+      bad: 0,
+    });
+  };
+
+  useEffect(() => {
+    localStorage.setItem('saved-values', JSON.stringify(values));
+  }, [values]);
+
+  const totalFeedback = values.good + values.neutral + values.bad;
+  const relationFeedback = Math.round(
+    ((values.good + values.neutral) / totalFeedback) * 100
+  );
+
   return (
     <>
-      <Profile
-        name={userData.username}
-        tag={userData.tag}
-        location={userData.location}
-        image={userData.avatar}
-        stats={userData.stats}
+      <Description />
+      <Options
+        values={values}
+        onUpdate={updateFeedback}
+        total={totalFeedback}
+        resetTotal={resetFeedback}
       />
-      <FriendList friends={friends} />
-      <TransactionHistory items={transactions} />
+      {totalFeedback > 0 ? (
+        <Feedback
+          good={values.good}
+          neutral={values.neutral}
+          bad={values.bad}
+          totalValue={totalFeedback}
+          relation={relationFeedback}
+        />
+      ) : (
+        <Notification />
+      )}
     </>
   );
-};
-
-export default App;
+}
